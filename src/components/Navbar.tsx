@@ -61,7 +61,7 @@ const Navbar = () => {
             <div className="flex flex-col space-y-2">
               <MobileNavLink
                 to="/"
-                text="首頁"
+                text="行程資訊"
                 emoji="🏠"
                 onClick={() => setIsMenuOpen(false)}
               />
