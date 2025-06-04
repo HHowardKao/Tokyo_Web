@@ -3,6 +3,7 @@ import Container from "../components/Container";
 import Navbar from "../components/Navbar";
 import { Table, Tooltip, Image } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import { useMediaQuery } from "react-responsive";
 
 interface AreaInfo {
   key: string;
@@ -20,16 +21,17 @@ interface TipsInfo {
 
 const DisneyLand: React.FC = () => {
   const [hoveredRow, setHoveredRow] = useState<string | null>(null);
+  const isMobile = useMediaQuery({ maxWidth: 768 });
 
   const columns: ColumnsType<AreaInfo> = [
     {
       title: "區域名稱",
       dataIndex: "area",
       key: "area",
-      width: 150,
+      width: isMobile ? 100 : 150,
       className: "!bg-rose-100 !text-rose-800 font-medium",
       render: (text) => (
-        <div className="font-bold text-lg text-rose-900 text-center">
+        <div className="font-bold text-sm md:text-lg text-rose-900 text-center">
           {text}
         </div>
       ),
@@ -40,21 +42,28 @@ const DisneyLand: React.FC = () => {
       key: "description",
       className: "!bg-rose-100 !text-rose-800 font-medium",
       render: (text) => (
-        <div className="text-gray-700 leading-relaxed text-center">{text}</div>
+        <div className="text-gray-700 leading-relaxed text-sm md:text-base text-center">
+          {text}
+        </div>
       ),
+      responsive: ["md"],
     },
     {
       title: "內含遊樂設施",
       dataIndex: "attractions",
       key: "attractions",
       className: "!bg-rose-100 !text-rose-800 font-medium",
-      width: 280,
+      width: isMobile ? 180 : 280,
       render: (attractions: string[]) => (
-        <div className="space-y-2">
+        <div className="space-y-1 md:space-y-2">
           {attractions.map((attraction, index) => (
-            <Tooltip key={index} title="點擊可查看更多資訊" placement="left">
+            <Tooltip
+              key={index}
+              title="點擊可查看更多資訊"
+              placement={isMobile ? "top" : "left"}
+            >
               <div
-                className="p-2 rounded-lg transition-all duration-300 hover:bg-rose-50 hover:shadow-md cursor-pointer border border-transparent hover:border-rose-200 text-center"
+                className="p-1 md:p-2 rounded-lg transition-all duration-300 hover:bg-rose-50 hover:shadow-md cursor-pointer border border-transparent hover:border-rose-200 text-center text-sm md:text-base"
                 onClick={() => console.log(`Clicked: ${attraction}`)}
               >
                 {attraction}
@@ -65,6 +74,27 @@ const DisneyLand: React.FC = () => {
       ),
     },
   ];
+
+  // 移動端專用的描述欄位
+  const mobileDescriptionColumn: ColumnsType<AreaInfo>[0] = {
+    title: "特色介紹",
+    dataIndex: "description",
+    key: "description-mobile",
+    className: "!bg-rose-100 !text-rose-800 font-medium",
+    render: (text) => (
+      <div className="text-gray-700 leading-relaxed text-sm text-center">
+        {text}
+      </div>
+    ),
+    responsive: ["xs", "sm"],
+  };
+
+  const finalColumns = isMobile
+    ? [
+        ...columns.filter((col) => col.key !== "description"),
+        mobileDescriptionColumn,
+      ]
+    : columns;
 
   const data: AreaInfo[] = [
     {
@@ -147,10 +177,10 @@ const DisneyLand: React.FC = () => {
       title: "類別",
       dataIndex: "category",
       key: "category",
-      width: 150,
+      width: isMobile ? 100 : 150,
       className: "!bg-rose-100 !text-rose-800 font-medium",
       render: (text) => (
-        <div className="font-bold text-lg text-rose-900 text-center">
+        <div className="font-bold text-sm md:text-lg text-rose-900 text-center">
           {text}
         </div>
       ),
@@ -161,9 +191,12 @@ const DisneyLand: React.FC = () => {
       key: "tips",
       className: "!bg-rose-100 !text-rose-800 font-medium",
       render: (tips: string[]) => (
-        <div className="space-y-2">
+        <div className="space-y-1 md:space-y-2">
           {tips.map((tip, index) => (
-            <div key={index} className="p-2 text-center">
+            <div
+              key={index}
+              className="p-1 md:p-2 text-center text-sm md:text-base"
+            >
               {tip}
             </div>
           ))}
@@ -174,10 +207,12 @@ const DisneyLand: React.FC = () => {
       title: "備註",
       dataIndex: "note",
       key: "note",
-      width: 200,
+      width: isMobile ? 120 : 200,
       className: "!bg-rose-100 !text-rose-800 font-medium",
       render: (text) => (
-        <div className="text-center italic text-gray-600">{text || "無"}</div>
+        <div className="text-center italic text-gray-600 text-sm md:text-base">
+          {text || "無"}
+        </div>
       ),
     },
   ];
@@ -230,9 +265,9 @@ const DisneyLand: React.FC = () => {
     <Container>
       <div className="min-h-screen bg-gray-50">
         <Navbar />
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-2 md:px-4 py-8">
           <div className="relative mb-12">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-4 relative">
+            <h1 className="text-2xl md:text-4xl font-bold text-gray-800 text-center mb-4 relative">
               迪士尼樂園區域介紹
               <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-rose-300 to-rose-400"></div>
             </h1>
@@ -262,59 +297,65 @@ const DisneyLand: React.FC = () => {
           </div>
 
           <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-12">
-            <Table
-              columns={columns}
-              dataSource={data}
-              pagination={false}
-              bordered
-              onRow={(record) => ({
-                onMouseEnter: () => setHoveredRow(record.key),
-                onMouseLeave: () => setHoveredRow(null),
-              })}
-              rowClassName={(record) =>
-                `transition-all duration-300 ${
-                  hoveredRow === record.key ? "bg-rose-50" : ""
-                }`
-              }
-              className="[&_.ant-table-thead>tr>th]:!py-4
-                        [&_.ant-table-thead>tr>th]:!text-lg
-                        [&_.ant-table-thead>tr>th]:!text-center
-                        [&_.ant-table-tbody>tr>td]:!align-middle 
-                        [&_.ant-table-tbody>tr>td]:!py-6
-                        [&_.ant-table-tbody>tr>td]:!px-6
-                        [&_.ant-table-tbody>tr>td]:!whitespace-pre-line
-                        [&_.ant-table]:!text-base
-                        [&_.ant-table-thead>tr>th]:!border-b-2
-                        [&_.ant-table-thead>tr>th]:!border-rose-200
-                        [&_.ant-table-tbody>tr>td]:!border-rose-100
-                        [&_.ant-table-tbody>tr:hover>td]:!bg-transparent
-                        [&_.ant-table]:!border-rose-100"
-            />
-          </div>
-
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-              行程攻略
-            </h2>
-            <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div className="overflow-x-auto">
               <Table
-                columns={tipsColumns}
-                dataSource={tipsData}
+                columns={finalColumns}
+                dataSource={data}
                 pagination={false}
                 bordered
-                className="[&_.ant-table-thead>tr>th]:!py-4
-                          [&_.ant-table-thead>tr>th]:!text-lg
+                scroll={{ x: isMobile ? 800 : undefined }}
+                onRow={(record) => ({
+                  onMouseEnter: () => setHoveredRow(record.key),
+                  onMouseLeave: () => setHoveredRow(null),
+                })}
+                rowClassName={(record) =>
+                  `transition-all duration-300 ${
+                    hoveredRow === record.key ? "bg-rose-50" : ""
+                  }`
+                }
+                className="[&_.ant-table-thead>tr>th]:!py-2 md:[&_.ant-table-thead>tr>th]:!py-4
+                          [&_.ant-table-thead>tr>th]:!text-base md:[&_.ant-table-thead>tr>th]:!text-lg
                           [&_.ant-table-thead>tr>th]:!text-center
                           [&_.ant-table-tbody>tr>td]:!align-middle 
-                          [&_.ant-table-tbody>tr>td]:!py-6
-                          [&_.ant-table-tbody>tr>td]:!px-6
+                          [&_.ant-table-tbody>tr>td]:!py-3 md:[&_.ant-table-tbody>tr>td]:!py-6
+                          [&_.ant-table-tbody>tr>td]:!px-2 md:[&_.ant-table-tbody>tr>td]:!px-6
                           [&_.ant-table-tbody>tr>td]:!whitespace-pre-line
-                          [&_.ant-table]:!text-base
+                          [&_.ant-table]:!text-sm md:[&_.ant-table]:!text-base
                           [&_.ant-table-thead>tr>th]:!border-b-2
                           [&_.ant-table-thead>tr>th]:!border-rose-200
                           [&_.ant-table-tbody>tr>td]:!border-rose-100
+                          [&_.ant-table-tbody>tr:hover>td]:!bg-transparent
                           [&_.ant-table]:!border-rose-100"
               />
+            </div>
+          </div>
+
+          <div className="mb-12">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-6 text-center">
+              行程攻略
+            </h2>
+            <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+              <div className="overflow-x-auto">
+                <Table
+                  columns={tipsColumns}
+                  dataSource={tipsData}
+                  pagination={false}
+                  bordered
+                  scroll={{ x: isMobile ? 600 : undefined }}
+                  className="[&_.ant-table-thead>tr>th]:!py-2 md:[&_.ant-table-thead>tr>th]:!py-4
+                            [&_.ant-table-thead>tr>th]:!text-base md:[&_.ant-table-thead>tr>th]:!text-lg
+                            [&_.ant-table-thead>tr>th]:!text-center
+                            [&_.ant-table-tbody>tr>td]:!align-middle 
+                            [&_.ant-table-tbody>tr>td]:!py-3 md:[&_.ant-table-tbody>tr>td]:!py-6
+                            [&_.ant-table-tbody>tr>td]:!px-2 md:[&_.ant-table-tbody>tr>td]:!px-6
+                            [&_.ant-table-tbody>tr>td]:!whitespace-pre-line
+                            [&_.ant-table]:!text-sm md:[&_.ant-table]:!text-base
+                            [&_.ant-table-thead>tr>th]:!border-b-2
+                            [&_.ant-table-thead>tr>th]:!border-rose-200
+                            [&_.ant-table-tbody>tr>td]:!border-rose-100
+                            [&_.ant-table]:!border-rose-100"
+                />
+              </div>
             </div>
           </div>
 

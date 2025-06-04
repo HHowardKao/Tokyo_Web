@@ -11,10 +11,12 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.8",
+    "@types/react-responsive": "^8.0.8",
     "@types/styled-components": "^5.1.34",
     "antd": "^5.25.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-responsive": "^10.0.1",
     "react-router-dom": "^7.6.1",
     "styled-components": "^6.1.18",
     "tailwindcss": "^4.1.8"
