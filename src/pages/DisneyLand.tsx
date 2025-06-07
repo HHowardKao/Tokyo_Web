@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import Container from "../components/Container";
 import Navbar from "../components/Navbar";
 import { Table, Image } from "antd";
