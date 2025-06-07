@@ -1,203 +1,61 @@
 import React, { useState } from "react";
 import Container from "../components/Container";
 import Navbar from "../components/Navbar";
-import { Table, Tooltip, Image } from "antd";
+import { Table, Image } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useMediaQuery } from "react-responsive";
-
-interface AreaInfo {
-  key: string;
-  area: string;
-  description: string;
-  attractions: string[];
-}
 
 interface TipsInfo {
   key: string;
   category: string;
-  tips: string[];
+  tips: Array<{
+    name: string;
+    image?: string;
+  }>;
   note?: string;
 }
 
 const DisneyLand: React.FC = () => {
-  const [hoveredRow, setHoveredRow] = useState<string | null>(null);
   const isMobile = useMediaQuery({ maxWidth: 768 });
-
-  const columns: ColumnsType<AreaInfo> = [
-    {
-      title: "區域名稱",
-      dataIndex: "area",
-      key: "area",
-      width: isMobile ? 100 : 150,
-      className: "!bg-rose-100 !text-rose-800 font-medium",
-      render: (text) => (
-        <div className="font-bold text-sm md:text-lg text-rose-900 text-center">
-          {text}
-        </div>
-      ),
-    },
-    {
-      title: "特色介紹",
-      dataIndex: "description",
-      key: "description",
-      className: "!bg-rose-100 !text-rose-800 font-medium",
-      render: (text) => (
-        <div className="text-gray-700 leading-relaxed text-sm md:text-base text-center">
-          {text}
-        </div>
-      ),
-      responsive: ["md"],
-    },
-    {
-      title: "內含遊樂設施",
-      dataIndex: "attractions",
-      key: "attractions",
-      className: "!bg-rose-100 !text-rose-800 font-medium",
-      width: isMobile ? 180 : 280,
-      render: (attractions: string[]) => (
-        <div className="space-y-1 md:space-y-2">
-          {attractions.map((attraction, index) => (
-            <Tooltip
-              key={index}
-              title="點擊可查看更多資訊"
-              placement={isMobile ? "top" : "left"}
-            >
-              <div
-                className="p-1 md:p-2 rounded-lg transition-all duration-300 hover:bg-rose-50 hover:shadow-md cursor-pointer border border-transparent hover:border-rose-200 text-center text-sm md:text-base"
-                onClick={() => console.log(`Clicked: ${attraction}`)}
-              >
-                {attraction}
-              </div>
-            </Tooltip>
-          ))}
-        </div>
-      ),
-    },
-  ];
-
-  // 移動端專用的描述欄位
-  const mobileDescriptionColumn: ColumnsType<AreaInfo>[0] = {
-    title: "特色介紹",
-    dataIndex: "description",
-    key: "description-mobile",
-    className: "!bg-rose-100 !text-rose-800 font-medium",
-    render: (text) => (
-      <div className="text-gray-700 leading-relaxed text-sm text-center">
-        {text}
-      </div>
-    ),
-    responsive: ["xs", "sm"],
-  };
-
-  const finalColumns = isMobile
-    ? [
-        ...columns.filter((col) => col.key !== "description"),
-        mobileDescriptionColumn,
-      ]
-    : columns;
-
-  const data: AreaInfo[] = [
-    {
-      key: "1",
-      area: "世界市集",
-      description:
-        "這裡是從園區入口直通城堡廣場的必經通道。\n以 20 世紀初懷舊的美式街道為設計概念，\n當時是電燈、汽車剛發明的年代，\n也是華特剛開始建立迪士尼傳奇的時代。\n沿路兩旁都是迪士尼服飾、配件、周邊商品等賣店，\n不論入園或出園前都可以在這邊採購一番！",
-      attractions: ["雙層巴士"],
-    },
-    {
-      key: "2",
-      area: "明日樂園",
-      description:
-        "最多必玩設施聚集的重點區域！\n整區以科幻時尚的銀白色為基調，\n打造趨商而科技的未來世界。",
-      attractions: [
-        "太空山",
-        "巴斯光年星際歷險",
-        "怪獸的歡樂之旅",
-        "怪獸電力公司「迷藏總發電」",
-        "星際旅行：冒險舞航",
-        "幸會史迪奇",
-      ],
-    },
-    {
-      key: "3",
-      area: "卡通城",
-      description:
-        "這裡是米奇與好朋友們共同居住、工作、遊玩的城鎮，\n整個園區大量使用繽紛卡通色，\n不論是建築物、字體、攤販都溫暖可愛，\n充滿想像力，彷彿走進迪士尼人物們的真實宇宙！",
-      attractions: ["米奇公館會米奇", "艾芝迷你雲霄飛車", "兔子蹦蹦卡通慢車"],
-    },
-    {
-      key: "4",
-      area: "夢幻樂園",
-      description:
-        "聚集了愛麗絲夢遊仙境、白雪公主、仙履奇緣、\n美女與野獸、小小世界等迪士尼最人氣的電影動畫宇宙，\n一圓少女們心中永遠的公主夢。",
-      attractions: [
-        "美女與野獸「城堡奇緣」",
-        "小熊維尼獵蜜記",
-        "幽靈公館",
-        "愛麗絲的午茶派對",
-        "小小世界",
-        "城堡旋轉木馬",
-        "白雪公主冒險旅程",
-        "仙履奇緣草話大廳",
-        "小飛象",
-        "小飛快天空之旅",
-        "小木偶奇遇記",
-      ],
-    },
-    {
-      key: "5",
-      area: "動物天地",
-      description:
-        "與西部樂園緊鄰，以美國河畔隔開兩園區。\n這裡以飛濺山的朱紅色山脈為中心，\n整體打造猶如踏本營的探險世界。",
-      attractions: ["飛濺山", "海獅克萊姆木舟歷險"],
-    },
-    {
-      key: "6",
-      area: "西部樂園",
-      description:
-        "以「巨雷山」的美國西部山脈為中心，\n園區內充斥礦石車、蒸汽船、汽笛聲等元素，\n重現昔日西部拓荒時的淘金世界，彷彿所有夢想都有機會實現！",
-      attractions: ["巨雷山", "蒸氣馬克吐溫號", "祠堂溜船之旅巨木筏"],
-    },
-    {
-      key: "7",
-      area: "探險樂園",
-      description:
-        "耳邊開始響起南島音樂，眼前看見中式建築、非洲浩亭、\n南洋稻草屋等異國建築物。沿著河岸聽聚文明，\n一起乘著海盜船，勇闖大自然中的冒險世界！",
-      attractions: [
-        "西部沿河巡遊",
-        "加勒比海盜",
-        "叢林巡航：勇闖野生世界",
-        "提基神殿：史迪奇呈獻「Aloha E Komo Mai!」",
-      ],
-    },
-  ];
 
   const tipsColumns: ColumnsType<TipsInfo> = [
     {
-      title: "類別",
+      title: "遊玩順序",
       dataIndex: "category",
       key: "category",
-      width: isMobile ? 100 : 150,
-      className: "!bg-rose-100 !text-rose-800 font-medium",
+      width: isMobile ? 100 : 180,
+      className: "!bg-rose-50 !text-rose-800 font-medium",
       render: (text) => (
-        <div className="font-bold text-sm md:text-lg text-rose-900 text-center">
+        <div className="font-bold text-base md:text-lg text-rose-900 text-center py-2 px-3 rounded-lg bg-rose-100/50">
           {text}
         </div>
       ),
+      fixed: "left",
     },
     {
-      title: "攻略重點",
+      title: "設施活動",
       dataIndex: "tips",
       key: "tips",
-      className: "!bg-rose-100 !text-rose-800 font-medium",
-      render: (tips: string[]) => (
-        <div className="space-y-1 md:space-y-2">
+      className: "!bg-rose-50 !text-rose-800 font-medium",
+      render: (tips: Array<{ name: string; image?: string }>) => (
+        <div className="space-y-4 py-2 md:py-4 min-w-[280px]">
           {tips.map((tip, index) => (
             <div
               key={index}
-              className="p-1 md:p-2 text-center text-sm md:text-base"
+              className="flex flex-col md:flex-row items-center gap-3 md:gap-4 bg-white p-3 md:p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300"
             >
-              {tip}
+              {tip.image && (
+                <img
+                  src={`/images/${tip.image}.jpg`}
+                  alt={tip.name}
+                  className="w-full md:w-[160px] h-[120px] md:h-[100px] object-cover rounded-lg"
+                />
+              )}
+              <div className="flex-1 text-center md:text-left mt-2 md:mt-0">
+                <div className="text-gray-800 font-medium text-sm md:text-lg">
+                  {tip.name}
+                </div>
+              </div>
             </div>
           ))}
         </div>
@@ -207,68 +65,195 @@ const DisneyLand: React.FC = () => {
       title: "備註",
       dataIndex: "note",
       key: "note",
-      width: isMobile ? 120 : 200,
-      className: "!bg-rose-100 !text-rose-800 font-medium",
+      width: isMobile ? 120 : 220,
+      className: "!bg-rose-50 !text-rose-800 font-medium",
       render: (text) => (
-        <div className="text-center italic text-gray-600 text-sm md:text-base">
+        <div className="text-gray-700 text-sm md:text-base p-2 md:p-3 bg-rose-100/30 rounded-lg whitespace-pre-wrap min-w-[100px]">
           {text || "無"}
         </div>
       ),
+      fixed: "right",
     },
   ];
 
   const tipsData: TipsInfo[] = [
     {
       key: "1",
-      category: "門票購買",
+      category: "明日樂園",
       tips: [
-        "建議提前在官網購買電子門票",
-        "可選擇1日券或多日券",
-        "多日券較為划算",
+        {
+          name: "怪獸電力公司「迷藏巡迴車」",
+          image: "game1",
+        },
+        {
+          name: "星際旅行：冒險續航",
+          image: "game2",
+        },
+        {
+          name: "杯麵歡樂之旅",
+          image: "game11",
+        },
       ],
-      note: "旺季時需提前2-3個月購買",
+      note: "要排很久的話就就3選2",
     },
     {
       key: "2",
-      category: "抵達方式",
-      tips: ["JR舞濱站下車", "搭乘迪士尼度假區線即可抵達", "從東京站約35分鐘"],
-      note: "建議提前30分鐘抵達",
+      category: "夢幻樂園",
+      tips: [
+        {
+          name: "美女與野獸「城堡奇緣」",
+          image: "game6",
+        },
+        {
+          name: "仙履奇緣童話大廳",
+          image: "game5",
+        },
+        {
+          name: "小飛俠天空之旅",
+          image: "game7",
+        },
+        {
+          name: "小熊維尼獵蜜記",
+          image: "game8",
+        },
+        {
+          name: "幽靈公館",
+          image: "game9",
+        },
+      ],
+      note: "美女與野獸=>DPA快速通關/小熊維尼和幽靈公館=>優先入場卡",
     },
     {
       key: "3",
-      category: "遊玩順序",
+      category: "卡通城",
       tips: [
-        "開園時先衝熱門設施",
-        "建議使用 Disney Premier Access",
-        "中午用餐時間可看表演",
+        {
+          name: "米奇公館會米奇",
+        },
       ],
-      note: "熱門設施：太空山、大雷山",
+      note: "超閒再去",
     },
     {
       key: "4",
-      category: "必備物品",
-      tips: ["舒適的走路鞋", "園區地圖", "行動電源", "雨具"],
+      category: "動物天地",
+      tips: [
+        {
+          name: "飛濺山",
+          image: "game4",
+        },
+      ],
+      note: "直接玩或是DPA快速通關",
     },
     {
       key: "5",
-      category: "用餐建議",
+      category: "西部樂園+探險樂園",
       tips: [
-        "建議提前預約餐廳",
-        "可下載官方APP查詢餐廳",
-        "避開12:00-13:00用餐尖峰",
+        {
+          name: "加勒比海盜",
+          image: "game3",
+        },
       ],
-      note: "特色餐廳需提前預約",
+      note: "依時間安排",
+    },
+    {
+      key: "6",
+      category: "表演活動",
+      tips: [
+        {
+          name: "午間遊行 (13:40)",
+          image: "game12",
+        },
+        {
+          name: "城堡燈光秀 (19:30)",
+          image: "game13",
+        },
+        {
+          name: "晚間遊行 (20:25)",
+          image: "game14",
+        },
+      ],
+      note: "建議提前15-30分鐘到場",
     },
   ];
+
+  const MobileView = () => (
+    <div className="space-y-6">
+      {tipsData.map((item) => (
+        <div
+          key={item.key}
+          className="bg-white rounded-xl shadow-lg overflow-hidden"
+        >
+          <div className="bg-rose-50 p-3">
+            <div className="font-bold text-lg text-rose-900 text-center">
+              {item.category}
+            </div>
+          </div>
+
+          <div className="p-4 space-y-4">
+            {item.tips.map((tip, index) => (
+              <div
+                key={index}
+                className="flex flex-col items-center bg-rose-50/20 p-3 rounded-xl"
+              >
+                {tip.image && (
+                  <img
+                    src={`/images/${tip.image}.jpg`}
+                    alt={tip.name}
+                    className="w-full h-[180px] object-cover rounded-lg mb-3"
+                  />
+                )}
+                <div className="text-gray-800 font-medium text-base text-center">
+                  {tip.name}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="bg-rose-50/30 p-3 border-t border-rose-100">
+            <div className="text-gray-700 text-sm text-center">
+              {item.note || "無"}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
+  const DesktopView = () => (
+    <div className="overflow-x-auto">
+      <Table
+        columns={tipsColumns}
+        dataSource={tipsData}
+        pagination={false}
+        bordered
+        className="
+          [&_.ant-table-thead>tr>th]:!bg-rose-50
+          [&_.ant-table-thead>tr>th]:!py-4
+          [&_.ant-table-thead>tr>th]:!text-lg
+          [&_.ant-table-thead>tr>th]:!font-bold
+          [&_.ant-table-thead>tr>th]:!text-rose-900
+          [&_.ant-table-thead>tr>th]:!text-center
+          [&_.ant-table-tbody>tr>td]:!align-top
+          [&_.ant-table-tbody>tr>td]:!bg-white
+          [&_.ant-table-tbody>tr:hover>td]:!bg-rose-50/30
+          [&_.ant-table-tbody>tr>td]:!transition-colors
+          [&_.ant-table-tbody>tr>td]:!duration-300
+          [&_.ant-table]:!border-rose-100
+          [&_.ant-table-cell]:!border-rose-100/50
+          [&_.ant-table-cell]:!p-4
+        "
+      />
+    </div>
+  );
 
   return (
     <Container>
       <div className="min-h-screen bg-gray-50">
         <Navbar />
-        <div className="container mx-auto px-2 md:px-4 py-8">
-          <div className="relative mb-12">
+        <div className="container mx-auto px-2 md:px-6 py-4 md:py-8">
+          <div className="relative mb-8 md:mb-12">
             <h1 className="text-2xl md:text-4xl font-bold text-gray-800 text-center mb-4 relative">
-              迪士尼樂園區域介紹
+              迪士尼樂園攻略
               <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-rose-300 to-rose-400"></div>
             </h1>
           </div>
@@ -277,86 +262,27 @@ const DisneyLand: React.FC = () => {
             <div className="rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
               <Image
                 src="/images/disney2.jpg"
-                alt="迪士尼樂園圖片2"
+                alt="迪士尼樂園地圖"
                 className="w-full h-[300px] object-cover"
                 preview={{
-                  mask: <div className="text-lg">點擊查看大圖</div>,
+                  mask: <div className="text-lg">點擊查看園區地圖</div>,
                 }}
               />
             </div>
             <div className="rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
               <Image
                 src="/images/disney3.jpg"
-                alt="迪士尼樂園圖片3"
+                alt="迪士尼樂園地圖"
                 className="w-full h-[300px] object-cover"
                 preview={{
-                  mask: <div className="text-lg">點擊查看大圖</div>,
+                  mask: <div className="text-lg">點擊查看園區地圖</div>,
                 }}
               />
             </div>
           </div>
 
           <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-12">
-            <div className="overflow-x-auto">
-              <Table
-                columns={finalColumns}
-                dataSource={data}
-                pagination={false}
-                bordered
-                scroll={{ x: isMobile ? 800 : undefined }}
-                onRow={(record) => ({
-                  onMouseEnter: () => setHoveredRow(record.key),
-                  onMouseLeave: () => setHoveredRow(null),
-                })}
-                rowClassName={(record) =>
-                  `transition-all duration-300 ${
-                    hoveredRow === record.key ? "bg-rose-50" : ""
-                  }`
-                }
-                className="[&_.ant-table-thead>tr>th]:!py-2 md:[&_.ant-table-thead>tr>th]:!py-4
-                          [&_.ant-table-thead>tr>th]:!text-base md:[&_.ant-table-thead>tr>th]:!text-lg
-                          [&_.ant-table-thead>tr>th]:!text-center
-                          [&_.ant-table-tbody>tr>td]:!align-middle 
-                          [&_.ant-table-tbody>tr>td]:!py-3 md:[&_.ant-table-tbody>tr>td]:!py-6
-                          [&_.ant-table-tbody>tr>td]:!px-2 md:[&_.ant-table-tbody>tr>td]:!px-6
-                          [&_.ant-table-tbody>tr>td]:!whitespace-pre-line
-                          [&_.ant-table]:!text-sm md:[&_.ant-table]:!text-base
-                          [&_.ant-table-thead>tr>th]:!border-b-2
-                          [&_.ant-table-thead>tr>th]:!border-rose-200
-                          [&_.ant-table-tbody>tr>td]:!border-rose-100
-                          [&_.ant-table-tbody>tr:hover>td]:!bg-transparent
-                          [&_.ant-table]:!border-rose-100"
-              />
-            </div>
-          </div>
-
-          <div className="mb-12">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-6 text-center">
-              行程攻略
-            </h2>
-            <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-              <div className="overflow-x-auto">
-                <Table
-                  columns={tipsColumns}
-                  dataSource={tipsData}
-                  pagination={false}
-                  bordered
-                  scroll={{ x: isMobile ? 600 : undefined }}
-                  className="[&_.ant-table-thead>tr>th]:!py-2 md:[&_.ant-table-thead>tr>th]:!py-4
-                            [&_.ant-table-thead>tr>th]:!text-base md:[&_.ant-table-thead>tr>th]:!text-lg
-                            [&_.ant-table-thead>tr>th]:!text-center
-                            [&_.ant-table-tbody>tr>td]:!align-middle 
-                            [&_.ant-table-tbody>tr>td]:!py-3 md:[&_.ant-table-tbody>tr>td]:!py-6
-                            [&_.ant-table-tbody>tr>td]:!px-2 md:[&_.ant-table-tbody>tr>td]:!px-6
-                            [&_.ant-table-tbody>tr>td]:!whitespace-pre-line
-                            [&_.ant-table]:!text-sm md:[&_.ant-table]:!text-base
-                            [&_.ant-table-thead>tr>th]:!border-b-2
-                            [&_.ant-table-thead>tr>th]:!border-rose-200
-                            [&_.ant-table-tbody>tr>td]:!border-rose-100
-                            [&_.ant-table]:!border-rose-100"
-                />
-              </div>
-            </div>
+            {isMobile ? <MobileView /> : <DesktopView />}
           </div>
 
           <div className="mt-12 bg-white rounded-xl shadow-lg overflow-hidden">
@@ -411,12 +337,6 @@ const DisneyLand: React.FC = () => {
                 </div>
               </div>
             </div>
-          </div>
-
-          <div className="mt-8 text-center text-gray-600">
-            <p className="text-sm">
-              提示：將滑鼠移到遊樂設施上可以查看更多資訊
-            </p>
           </div>
         </div>
       </div>
