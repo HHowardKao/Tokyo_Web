@@ -120,7 +120,7 @@ const DisneyLand: React.FC = () => {
           image: "game9",
         },
       ],
-      note: "美女與野獸=>DPA快速通關/小熊維尼和幽靈公館=>優先入場卡",
+      note: "美女與野獸=>DPA快速通關\n小熊維尼和幽靈公館=>優先入場卡",
     },
     {
       key: "3",
