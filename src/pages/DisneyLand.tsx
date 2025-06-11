@@ -67,8 +67,18 @@ const DisneyLand: React.FC = () => {
       width: isMobile ? 120 : 220,
       className: "!bg-rose-50 !text-rose-800 font-medium",
       render: (text) => (
-        <div className="text-gray-700 text-sm md:text-base p-2 md:p-3 bg-rose-100/30 rounded-lg whitespace-pre-wrap min-w-[100px]">
-          {text || "無"}
+        <div className="text-gray-700 text-sm md:text-base p-2 md:p-3 bg-rose-100/30 rounded-lg min-w-[100px]">
+          {text ? (
+            <div className="flex flex-col gap-2">
+              {text.split("\n").map((line: string, index: number) => (
+                <div key={index} className="bg-white/50 p-2 rounded">
+                  {line}
+                </div>
+              ))}
+            </div>
+          ) : (
+            "無"
+          )}
         </div>
       ),
       fixed: "right",
@@ -120,7 +130,9 @@ const DisneyLand: React.FC = () => {
           image: "game9",
         },
       ],
-      note: "美女與野獸=>DPA快速通關\n小熊維尼和幽靈公館=>優先入場卡",
+      note: ["美女與野獸=>DPA快速通關", "小熊維尼和幽靈公館=>優先入場卡"].join(
+        "\n"
+      ),
     },
     {
       key: "3",
@@ -209,8 +221,21 @@ const DisneyLand: React.FC = () => {
           </div>
 
           <div className="bg-rose-50/30 p-3 border-t border-rose-100">
-            <div className="text-gray-700 text-sm text-center">
-              {item.note || "無"}
+            <div className="text-gray-700 text-center">
+              {item.note ? (
+                <div className="flex flex-col gap-2">
+                  {item.note.split("\n").map((line: string, index: number) => (
+                    <div
+                      key={index}
+                      className="bg-white/50 p-2 rounded text-sm"
+                    >
+                      {line}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                "無"
+              )}
             </div>
           </div>
         </div>
