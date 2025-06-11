@@ -48,10 +48,10 @@ const Navbar = () => {
 
             {/* 桌面版選單 */}
             <div className="hidden md:flex items-center space-x-8">
-              <NavLink to="/" text="首頁" emoji="🏠" />
+              <NavLink to="/" text="行程資訊" emoji="🏠" />
               <NavLink to="/disneyland" text="迪士尼專區" emoji="📖" />
               <NavLink to="/hotel" text="住宿資訊" emoji="🏨" />
-              <NavLink to="/expense" text="花費資訊" emoji="💰" />
+              <NavLink to="/expense" text="支出管理" emoji="💰" />
               <NavLink to="/transportation" text="交通資訊" emoji="🚗" />
             </div>
           </div>
@@ -79,7 +79,7 @@ const Navbar = () => {
               />
               <MobileNavLink
                 to="/expense"
-                text="花費資訊"
+                text="支出管理"
                 emoji="💰"
                 onClick={() => setIsMenuOpen(false)}
               />

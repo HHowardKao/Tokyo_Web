@@ -91,12 +91,11 @@ const Transportation: React.FC = () => {
     },
     {
       title: "江之島電鐵",
-      imagePaths: ["enoden.png"],
-      description: `路線：鎌倉站 ⇔ 藤澤站
+      imagePaths: ["enoden.png", "enoden2.png"],
+      description: `江之島電鐵是連接鎌倉站和藤澤站之間的鐵路路線，是鎌倉市和藤澤市之間的重要交通工具。
+路線：鎌倉站 ⇔ 藤澤站
 特色：沿著海岸線行駛的復古電車
-票價：普通車廂單程約300日圓
-營運時間：首班06:00 - 末班23:00
-主要景點：鎌倉高校前平交道、江之島`,
+`,
     },
   ];
 
